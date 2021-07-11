@@ -5,8 +5,8 @@
   (gnu)
   (gnu system nss)
   (gnu packages)
-  (nongnu packages linux)
-  (nongnu system linux-initrd)
+;;  (nongnu packages linux)
+;;  (nongnu system linux-initrd)
 )
 (use-service-modules
   desktop
@@ -24,6 +24,13 @@
   bootloaders
   certs
   xdisorg
+  usb-modeswitch
+  screen
+  fonts
+  disk
+  guile-xyz
+  guile
+  emacs-xyz
   emacs
   image
   wm
@@ -37,6 +44,7 @@
   version-control
   linux
   xfce
+  lxde
   file-systems
   gnome
   shells
@@ -52,9 +60,9 @@
 		   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
 (operating-system
-  (kernel linux)
-  (initrd microcode-initrd)
-  (firmware (list linux-firmware))
+;;  (kernel linux)
+;;  (initrd microcode-initrd)
+;;  (firmware (list linux-firmware))
   (locale "en_US.utf8")
   (timezone "America/New_York")
   (keyboard-layout (keyboard-layout "us" #:model "thinkpad"))
@@ -74,7 +82,19 @@
   (packages
     (append
       (list sway
+	    swayidle
+	    swaylock
+	    usb-modeswitch
+	    screen
+	    font-hack
+	    fdisk
+	    guile-readline
+	    guile-colorized
+	    emacs-guix
+	    glibc-utf8-locales
 	    hikari
+	    cagebreak
+	    dwl
             alacritty
 	    wofi
 	    wl-clipboard
@@ -83,6 +103,8 @@
             emacs
 	    thunar
 	    git
+	    lxappearance
+	    pavucontrol
 	    fuse-exfat
 	    vim
 	    bluez
@@ -92,7 +114,11 @@
       %base-packages))
   (services
     (append
-      (list (service openssh-service-type)
+      (list (service openssh-service-type
+		     (openssh-configuration
+		       (port-number 45221)
+		       (permit-root-login #f)
+		       (public-key-authentication? #t)))
 	    (service docker-service-type)
 	    (service sddm-service-type)
 	    (screen-locker-service hikari "hikari-unlocker")
@@ -111,7 +137,7 @@
   (file-systems
     (cons* (file-system
              (mount-point "/boot/efi")
-             (device (uuid "2C44-284A" 'fat32))
+             (device (uuid "F7DB-1326" 'fat32))
              (type "vfat")
 	     (flags '(no-atime)))
            (file-system
