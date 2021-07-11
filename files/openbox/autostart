@@ -1,0 +1,6 @@
+clipit &
+compton &
+tint2 &
+feh --bg-scale /home/dylan/Downloads/wallpaper
+thunar --daemon &
+emacs --daemon &
