@@ -45,6 +45,7 @@
   linux
   xfce
   lxde
+  suckless
   file-systems
   gnome
   shells
