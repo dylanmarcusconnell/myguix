@@ -90,6 +90,7 @@
 	    fdisk
 	    guile-readline
 	    guile-colorized
+	    dmenu
 	    emacs-guix
 	    glibc-utf8-locales
 	    hikari
