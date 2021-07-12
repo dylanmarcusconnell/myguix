@@ -5,8 +5,8 @@
   (gnu)
   (gnu system nss)
   (gnu packages)
-;;  (nongnu packages linux)
-;;  (nongnu system linux-initrd)
+  (nongnu packages linux)
+  (nongnu system linux-initrd)
 )
 (use-service-modules
   desktop
@@ -61,9 +61,9 @@
 		   "RUN+=\"/run/current-system/profile/bin/chmod g+w /sys/class/backlight/%k/brightness\"")))
 
 (operating-system
-;;  (kernel linux)
-;;  (initrd microcode-initrd)
-;;  (firmware (list linux-firmware))
+  (kernel linux)
+  (initrd microcode-initrd)
+  (firmware (list linux-firmware))
   (locale "en_US.utf8")
   (timezone "America/New_York")
   (keyboard-layout (keyboard-layout "us" #:model "thinkpad"))
@@ -139,7 +139,7 @@
   (file-systems
     (cons* (file-system
              (mount-point "/boot/efi")
-             (device (uuid "F7DB-1326" 'fat32))
+             (device (uuid "2C44-284A" 'fat32))
              (type "vfat")
 	     (flags '(no-atime)))
            (file-system
@@ -163,4 +163,12 @@
 	     (type "ext4")
 	     (flags '(no-atime))
 	     (needed-for-boot? #t))
-           %base-file-systems)))
+	   (file-system
+	     (mount-point "/mnt/storage")
+	     (device
+	       (uuid "BC8209EC8209ABC8" 'ntfs))
+	     (type "ntfs")
+	     (needed-for-boot? #f))
+           %base-file-systems))
+  (swap-devices
+    (list (file-system-label "swap))))
