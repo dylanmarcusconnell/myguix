@@ -72,8 +72,8 @@
 		       (tls-port "16555")))
 	    (service openvpn-server-service
 		     (openvpn-server-configuration
-		       ()
-		       ())))
+		       (redirect-gateway? #t)
+		       (client-to-client? #t))))
       %base-services))
   (bootloader
     (bootloader-configuration
