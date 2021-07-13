@@ -1,0 +1,35 @@
+flush ruleset
+
+table inet filter {
+	chain output {
+		type filter hook output priority 100; policy accept;
+	}
+
+	chain input {
+		type filter hook input priority filter; policy drop;
+		iifname "lo" accept
+		iifname "tun0" accept
+		ct state invalid drop
+		ct state established,related accept
+		ip protocol icmp limit rate 4/second accept
+		ip6 nexthdr ipv6-icmp limit rate 4/second accept
+		ip protocol igmp limit rate 4/second accept
+		ip saddr 10.8.0.0/16 accept
+		ip6 saddr fddd:1194:1194:1194::/64 accept
+		ip saddr 10.8.0.0/16 tcp dport 53 accept
+		ip saddr 10.8.0.0/16 udp dport 53 accept
+		iifname tun0 oifname tun0 accept
+		tcp dport 54221 accept
+		udp dport 54221 accept
+		ip saddr 10.8.0.0/16 tcp dport { 80, 800, 443 } accept
+		udp dport { 80, 800, 443 } accept
+		udp dport 1194 accept
+		tcp dport 1194 accept
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+		iifname "tun0" oifname "eth0" accept
+		ct state related,established accept
+	}
+}
