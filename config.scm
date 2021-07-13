@@ -53,7 +53,7 @@
 
 (define %backlight-udev-rule
   (udev-rule
-    "90-backlight.rules"
+    "97-backlight.rules"
     (string-append "ACTION==\"add\", SUBSYSTEM==\"backlight\", "
 		   "RUN+=\"/run/current-system/profile/bin/chgrp video /sys/class/backlight/%k/brightness\""
 		   "\n"
@@ -123,6 +123,7 @@
 		       (public-key-authentication? #t)))
 	    (service docker-service-type)
 	    (service sddm-service-type)
+	    (udev-rules-service 'brightness %backlight-udev-rule)
 	    (screen-locker-service hikari "hikari-unlocker")
 	    (service libvirt-service-type
 		     (libvirt-configuration

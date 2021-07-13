@@ -21,6 +21,8 @@ set $term alacritty
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
 default_border none
+smart_gaps on
+gaps inner 10
 
 ### Output configuration
 #
