@@ -20,6 +20,8 @@ set $term alacritty
 # on the original workspace that the command was run on.
 set $menu dmenu_path | dmenu | xargs swaymsg exec --
 
+default_border none
+
 ### Output configuration
 #
 # Default wallpaper (more resolutions are available in /gnu/store/pbdhkg0pm55jjs6fq2v5b12d5l0fb026-sway-1.5.1/share/backgrounds/sway/)
@@ -30,7 +32,10 @@ output * bg /home/dylan/.sway/wallpaper.jpg fill
 #   output HDMI-A-1 resolution 1920x1080 position 1920,0
 #
 # You can get the names of your outputs by running: swaymsg -t get_outputs
-
+### Gamma configuration
+#
+#
+ exec redshift -l 29.025153497282368:-82.06550419304364 &
 ### Idle configuration
 #
 # Example configuration:
