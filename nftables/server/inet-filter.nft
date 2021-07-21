@@ -1,0 +1,28 @@
+table inet filter {
+	chain output {
+		type filter hook output priority 100; policy accept;
+	}
+
+	chain input {
+		type filter hook input priority filter; policy drop;
+		ip saddr 10.8.0.0/24 tcp dport 53 accept
+		ip saddr 10.8.0.0/24 udp dport 53 accept
+		tcp dport 54221 accept
+		udp dport 54221 accept
+		ip protocol icmp limit rate 4/second accept
+		ip6 nexthdr ipv6-icmp limit rate 4/second accept
+		ip protocol igmp limit rate 4/second accept
+		tcp dport { 80, 443 } accept
+		udp dport { 80, 443 } accept
+		iifname "lo" accept
+		iifname "tun0" accept
+		ct state invalid drop
+		ct state established,related accept
+		ip saddr fddd:1194:1194:1194::/64 accept
+		
+	}
+
+	chain forward {
+		type filter hook forward priority filter; policy drop;
+	}
+}
