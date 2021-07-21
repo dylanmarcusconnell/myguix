@@ -1,6 +1,3 @@
-;; This is an operating system configuration generated
-;; by the graphical installer.
-
 (use-modules
   (gnu)
   (gnu system nss)
@@ -17,6 +14,7 @@
   cups
   pm
   sound
+  audio
   xorg
   ssh
   docker)
@@ -122,6 +120,17 @@
 		       (permit-root-login #f)
 		       (public-key-authentication? #t)))
 	    (service docker-service-type)
+	    (service mpd-service-type
+		     (mpd-configuration
+		       (user "dylan")
+		       (music-dir "/mnt/storage/Music")
+		       (port "6666")
+		       (outputs
+			 (list (mpd-output
+				 (name "MPD")
+				 (type "pulse")
+				 (enabled? #t)
+				 (always-on? #t))))))
 	    (service sddm-service-type)
 	    (udev-rules-service 'brightness %backlight-udev-rule)
 	    (screen-locker-service hikari "hikari-unlocker")
