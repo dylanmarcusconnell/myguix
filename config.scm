@@ -60,7 +60,7 @@
 
 (operating-system
   (kernel linux)
-  (initrd microcode-initrd)
+  (initrd base-initrd)
   (firmware (list linux-firmware))
   (locale "en_US.utf8")
   (timezone "America/New_York")
@@ -87,6 +87,7 @@
 	    screen
 	    font-hack
 	    fdisk
+	    ntfs-3g
 	    guile-readline
 	    guile-colorized
 	    dmenu
@@ -173,12 +174,12 @@
 	     (type "ext4")
 	     (flags '(no-atime))
 	     (needed-for-boot? #t))
-	   (file-system
-	     (mount-point "/mnt/storage")
-	     (device
-	       (uuid "BC8209EC8209ABC8" 'ntfs))
-	     (type "ntfs")
-	     (needed-for-boot? #f))
+;;	   (file-system
+;;	     (mount-point "/mnt/storage")
+;;	     (device
+;;	       (uuid "BC8209EC8209ABC8" 'ntfs))
+;;	     (type "ntfs")
+;;	     (needed-for-boot? #f))
            %base-file-systems))
   (swap-devices
-    (list (file-system-label "swap))))
+    (list (file-system-label "swap"))))
