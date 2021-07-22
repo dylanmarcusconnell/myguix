@@ -97,6 +97,7 @@
 	    cagebreak
 	    dwl
             alacritty
+	    dosfstools
 	    wofi
 	    wl-clipboard
 	    wob
@@ -157,21 +158,21 @@
              (mount-point "/")
              (device
                (file-system-label "my-root"))
-             (type "ext4")
+             (type "btrfs")
 	     (flags '(lazy-time))
 	     (needed-for-boot? #t))
 	   (file-system
 	     (mount-point "/gnu")
 	     (device
 	       (file-system-label "gnu"))
-	     (type "ext4")
+	     (type "btrfs")
 	     (flags '(lazy-time))
 	     (needed-for-boot? #t))
 	   (file-system
 	     (mount-point "/tmp")
 	     (device
 	       (file-system-label "tmp"))
-	     (type "ext4")
+	     (type "btrfs")
 	     (flags '(no-atime))
 	     (needed-for-boot? #t))
 ;;	   (file-system
