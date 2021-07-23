@@ -5,16 +5,22 @@
 ;; See the "Replicating Guix" section in the manual.
 
 (specifications->manifest
-  (list "arc-icon-theme"
-        "papirus-icon-theme"
+  (list "font-hack"
+        "ungoogled-chromium"
+        "anki"
         "calibre"
+        "zathura-djvu"
+        "zathura-pdf-mupdf"
+        "zathura"
+        "thunar-volman"
+        "xdg-utils"
+        "arc-icon-theme"
         "ghc"
         "gcc-toolchain"
         "mpv"
         "icecat"
         "qbittorrent"
         "ncmpcpp"
-        "gnome-icon-theme"
         "powertop"
         "cpufrequtils"
         "light"))
