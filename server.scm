@@ -73,7 +73,13 @@
 	    (service openvpn-server-service
 		     (openvpn-server-configuration
 		       (redirect-gateway? #t)
-		       (client-to-client? #t))))
+		       (client-to-client? #t)
+		       ()))
+	    (service openvpn-server-service
+		     (openvpn-server-configuration
+		       (redirect-gateway? #t)
+		       (client-to-client? #f)
+		       ())))
       %base-services))
   (bootloader
     (bootloader-configuration
