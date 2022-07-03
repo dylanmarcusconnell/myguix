@@ -2,6 +2,13 @@
   (gnu)
   (gnu system nss)
   (gnu packages)
+  (ice-9 match)
+  (guix store)
+  (guix gexp)
+  (guix monads)
+  (guix modules)
+  (guix platform)
+  (guix utils)
   (nongnu packages linux)
   (nongnu system linux-initrd))
 (use-service-modules
@@ -16,6 +23,7 @@
   databases
   sound
   audio
+  shepherd
   xorg
   ssh
   docker)
@@ -23,6 +31,7 @@
   bootloaders
   certs
   xdisorg
+  package-management
   vpn
   usb-modeswitch
   screen
@@ -50,6 +59,60 @@
   gnome
   shells
   cups)
+
+(define %backing-directory
+  ;; Sub-directory used as the backing store for copy-on-write.
+  "/tmp/guix-inst")
+
+(define cow-store-service-type
+  (shepherd-service-type
+   'cow-store
+   (lambda _
+     (define (import-module? module)
+       ;; Since we don't use deduplication support in 'populate-store', don't
+       ;; import (guix store deduplication) and its dependencies, which
+       ;; includes Guile-Gcrypt.
+       (and (guix-module-name? module)
+            (not (equal? module '(guix store deduplication)))))
+
+     (shepherd-service
+      (requirement '(root-file-system user-processes))
+      (provision '(cow-store))
+      (documentation
+       "Make the store copy-on-write, with writes going to \
+the given target.")
+
+      ;; This is meant to be explicitly started by the user.
+      (auto-start? #f)
+
+      (modules `((gnu build install)
+                 ,@%default-modules))
+      (start
+       (with-imported-modules (source-module-closure
+                               '((gnu build install))
+                               #:select? import-module?)
+         #~(case-lambda
+             ((target)
+              (mount-cow-store target #$%backing-directory)
+              target)
+             (else
+              ;; Do nothing, and mark the service as stopped.
+              #f))))
+      (stop #~(lambda (target)
+                ;; Delete the temporary directory, but leave everything
+                ;; mounted as there may still be processes using it since
+                ;; 'user-processes' doesn't depend on us.  The 'user-file-systems'
+                ;; service will unmount TARGET eventually.
+                (delete-file-recursively
+                 (string-append target #$%backing-directory))))))
+   (description "Make the store copy-on-write, with writes going to \
+the given target.")))
+
+(define (cow-store-service)
+  "Return a service that makes the store copy-on-write, such that writes go to
+the user's target storage device rather than on the RAM disk."
+  ;; See <http://bugs.gnu.org/18061> for the initial report.
+  (service cow-store-service-type 'mooooh!))
 
 (define %backlight-udev-rule
   (udev-rule
@@ -94,7 +157,6 @@
 	    guile-colorized
 	    dmenu
 	    glibc-utf8-locales
-	    btrfs-progs
 	    hikari
 	    cagebreak
 	    nginx
@@ -125,6 +187,7 @@
 		       (permit-root-login #f)
 		       (public-key-authentication? #t)))
 	    (service docker-service-type)
+	    (cow-store-service)
 	    (service postgresql-service-type
 		     (postgresql-configuration
 		       (postgresql postgresql-14)))
