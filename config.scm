@@ -94,7 +94,6 @@
 	    guile-colorized
 	    dmenu
 	    glibc-utf8-locales
-	    btrfs-progs
 	    hikari
 	    cagebreak
 	    nginx
